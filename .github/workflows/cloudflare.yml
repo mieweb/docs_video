@@ -1,0 +1,25 @@
+name: "CloudFlare"
+
+on:
+  push:
+    branches:
+        - 'main'
+
+jobs:
+  update:
+    name: "Update CloudFlare"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Change something
+        run: |
+          find . -type f -name "*.mp4" | while read FULLPATH; do echo $( basename "$FULLPATH" %); done
+      - name: Change something
+        run: |
+          find . -type f -name "*.mp4" -print0 | xargs -0 curl \
+          -X POST \
+          -d '{"url":"https://storage.googleapis.com/zaid-test/Watermarks%20Demo/cf-ad-original.mp4","meta":{"name":"My First Stream Video"}}' \
+          -H "Authorization: Bearer <API_TOKEN>" \
+          https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream/copy
